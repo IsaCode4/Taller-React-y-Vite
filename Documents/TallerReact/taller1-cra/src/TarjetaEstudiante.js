@@ -1,6 +1,4 @@
-// Desestructuración de props directamente en los parámetros
-function TarjetaEstudiante({ nombre, programa, semestre, nota }) {
-  // Lógica para color de la nota
+function TarjetaEstudiante({ nombre, programa, semestre, email, nota }) {
   const colorNota =
     nota >= 4.0 ? "#1B5E20" : nota >= 3.0 ? "#E65100" : "#B71C1C";
 
@@ -12,7 +10,7 @@ function TarjetaEstudiante({ nombre, programa, semestre, nota }) {
         padding: "16px",
         margin: "8px",
         backgroundColor: "#FAFAFA",
-        minWidth: "200px",
+        minWidth: "220px",
       }}
     >
       <h3 style={{ color: "#0D2353", margin: "0 0 8px 0" }}>{nombre}</h3>
@@ -21,6 +19,9 @@ function TarjetaEstudiante({ nombre, programa, semestre, nota }) {
       </p>
       <p style={{ margin: "4px 0", fontSize: "14px", color: "#455A64" }}>
         Semestre: <strong>{semestre}</strong>
+      </p>
+      <p style={{ margin: "4px 0", fontSize: "13px", color: "#1565C0" }}>
+        {email}
       </p>
       <span
         style={{
