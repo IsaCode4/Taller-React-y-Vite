@@ -1,31 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormTarea from "./FormTarea";
 import ItemTarea from "./ItemTarea";
 
-// Tareas iniciales de ejemplo
 const TAREAS_INICIALES = [
-  { id: 1, texto: "Leer el manual de React", completada: true },
-  { id: 2, texto: "Hacer el Ejercicio 1", completada: true },
-  { id: 3, texto: "Hacer el Ejercicio 2", completada: false },
-  { id: 4, texto: "Hacer el Ejercicio 3", completada: false },
-  { id: 5, texto: "Completar el Taller 1", completada: false },
+  {
+    id: 1,
+    texto: "Leer el manual de React",
+    completada: true,
+    prioridad: "Baja",
+  },
+  {
+    id: 2,
+    texto: "Hacer el Ejercicio 1",
+    completada: true,
+    prioridad: "Media",
+  },
+  {
+    id: 3,
+    texto: "Hacer el Ejercicio 2",
+    completada: false,
+    prioridad: "Media",
+  },
+  {
+    id: 4,
+    texto: "Hacer el Ejercicio 3",
+    completada: false,
+    prioridad: "Alta",
+  },
+  {
+    id: 5,
+    texto: "Completar el Taller 1",
+    completada: false,
+    prioridad: "Alta",
+  },
 ];
 
 function App() {
-  const [tareas, setTareas] = useState(TAREAS_INICIALES);
-  const [filtro, setFiltro] = useState("todas"); // 'todas' | 'pendientes' | 'completadas'
+  // Cargar desde localStorage si existe; si no, usar TAREAS_INICIALES
+  const [tareas, setTareas] = useState(() => {
+    const guardadas = localStorage.getItem("taller1_tareas");
+    return guardadas ? JSON.parse(guardadas) : TAREAS_INICIALES;
+  });
 
-  // Agregar nueva tarea
-  const agregarTarea = (texto) => {
+  const [filtro, setFiltro] = useState("todas");
+
+  // Guardar automáticamente en localStorage cada vez que cambie la lista de tareas
+  useEffect(() => {
+    localStorage.setItem("taller1_tareas", JSON.stringify(tareas));
+  }, [tareas]);
+
+  // Agregar nueva tarea con prioridad
+  const agregarTarea = (texto, prioridad) => {
     const nueva = {
-      id: Date.now(), // ID único usando timestamp
+      id: Date.now(),
       texto,
       completada: false,
+      prioridad,
     };
-    setTareas([...tareas, nueva]); // Spread: crear nuevo array (inmutabilidad)
+    setTareas([...tareas, nueva]);
   };
 
-  // Alternar estado completada/pendiente
+  // Alternar completada/pendiente
   const toggleTarea = (id) => {
     setTareas(
       tareas.map((t) =>
@@ -34,16 +69,28 @@ function App() {
     );
   };
 
-  // Eliminar tarea por ID
+  // Editar texto de una tarea existente
+  const editarTarea = (id, nuevoTexto) => {
+    setTareas(
+      tareas.map((t) => (t.id === id ? { ...t, texto: nuevoTexto } : t)),
+    );
+  };
+
+  // Eliminar tarea individual
   const eliminarTarea = (id) => {
     setTareas(tareas.filter((t) => t.id !== id));
   };
 
-  // Filtrar tareas según el filtro activo
+  // Eliminar todas las tareas completadas
+  const eliminarCompletadas = () => {
+    setTareas(tareas.filter((t) => !t.completada));
+  };
+
+  // Filtrar tareas
   const tareasFiltradas = tareas.filter((t) => {
     if (filtro === "pendientes") return !t.completada;
     if (filtro === "completadas") return t.completada;
-    return true; // 'todas'
+    return true;
   });
 
   // Contadores
@@ -51,7 +98,6 @@ function App() {
   const completadas = tareas.filter((t) => t.completada).length;
   const pendientes = total - completadas;
 
-  // Estilo para botones de filtro
   const btnFiltro = (nombre) => ({
     padding: "6px 16px",
     borderRadius: "20px",
@@ -65,7 +111,7 @@ function App() {
   return (
     <div
       style={{
-        maxWidth: "600px",
+        maxWidth: "640px",
         margin: "0 auto",
         padding: "32px",
         fontFamily: "Arial",
@@ -73,45 +119,77 @@ function App() {
     >
       {/* Encabezado */}
       <div style={{ marginBottom: "24px" }}>
-        <h1 style={{ color: "#8ba4db", margin: "0 0 8px 0" }}>
+        <h1 style={{ color: "#5e8ff8", margin: "0 0 8px 0" }}>
           Mis Tareas — Programación II
         </h1>
-        <div style={{ display: "flex", gap: "16px" }}>
-          <span style={{ color: "#2ea2d8" }}>
+        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+          <span style={{ color: "#2682ad" }}>
             Total: <strong>{total}</strong>
           </span>
-          <span style={{ color: "#4cb352" }}>
+          <span style={{ color: "#69c06f" }}>
             Completadas: <strong>{completadas}</strong>
           </span>
-          <span style={{ color: "#c96f6f" }}>
+          <span style={{ color: "#d86666" }}>
             Pendientes: <strong>{pendientes}</strong>
           </span>
         </div>
+        <p style={{ fontSize: "12px", color: "#6586c7", marginTop: "6px" }}>
+          Tip: Haz doble clic sobre el texto de cualquier tarea para editarla.
+        </p>
       </div>
 
-      {/* Formulario para agregar tarea */}
+      {/* Formulario */}
       <FormTarea onAgregar={agregarTarea} />
 
-      {/* Botones de filtro */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
-        <button style={btnFiltro("todas")} onClick={() => setFiltro("todas")}>
-          Todas ({total})
-        </button>
-        <button
-          style={btnFiltro("pendientes")}
-          onClick={() => setFiltro("pendientes")}
-        >
-          Pendientes ({pendientes})
-        </button>
-        <button
-          style={btnFiltro("completadas")}
-          onClick={() => setFiltro("completadas")}
-        >
-          Completadas ({completadas})
-        </button>
+      {/* Filtros y botón de limpiar completadas */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "8px",
+          marginBottom: "20px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "8px" }}>
+          <button style={btnFiltro("todas")} onClick={() => setFiltro("todas")}>
+            Todas ({total})
+          </button>
+          <button
+            style={btnFiltro("pendientes")}
+            onClick={() => setFiltro("pendientes")}
+          >
+            Pendientes ({pendientes})
+          </button>
+          <button
+            style={btnFiltro("completadas")}
+            onClick={() => setFiltro("completadas")}
+          >
+            Completadas ({completadas})
+          </button>
+        </div>
+
+        {completadas > 0 && (
+          <button
+            onClick={eliminarCompletadas}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              cursor: "pointer",
+              border: "1px solid #FCA5A5",
+              backgroundColor: "#FEF2F2",
+              color: "#B91C1C",
+              fontSize: "13px",
+              fontWeight: "bold",
+            }}
+          >
+            🗑 Eliminar completadas ({completadas})
+          </button>
+        )}
       </div>
 
-      {/* Lista de tareas filtradas */}
+      {/* Lista */}
       {tareasFiltradas.length === 0 ? (
         <p style={{ color: "#9CA3AF", textAlign: "center", padding: "32px" }}>
           No hay tareas en esta categoría.
@@ -124,6 +202,7 @@ function App() {
               tarea={tarea}
               onToggle={toggleTarea}
               onEliminar={eliminarTarea}
+              onEditar={editarTarea}
             />
           ))}
         </ul>
