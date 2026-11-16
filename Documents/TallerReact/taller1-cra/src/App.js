@@ -1,13 +1,10 @@
 // src/App.js
-import Contador from "./Contador";
+import FormRegistro from "./FormRegistro";
 
 function App() {
   return (
     <div>
-      <h1 style={{ textAlign: "center", color: "#0D2353", padding: "20px" }}>
-        Ejercicio 3 — useState
-      </h1>
-      <Contador />
+      <FormRegistro />
     </div>
   );
 }
