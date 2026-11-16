@@ -1,30 +1,27 @@
-import { useState } from "react"; // ← Importar el Hook
+import { useState } from "react";
 
-function Contador() {
-  // Declarar el estado
+function ContadorBasico() {
   const [contador, setContador] = useState(0);
 
-  // Funciones manejadoras de eventos
   const incrementar = () => setContador(contador + 1);
   const decrementar = () => setContador(contador - 1);
   const reiniciar = () => setContador(0);
 
-  // Color dinámico según el valor
   const color = contador > 0 ? "#1B5E20" : contador < 0 ? "#B71C1C" : "#455A64";
 
   return (
     <div
       style={{
         textAlign: "center",
-        padding: "40px",
+        padding: "24px",
         fontFamily: "Arial",
-        maxWidth: "320px",
-        margin: "0 auto",
+        maxWidth: "360px",
+        margin: "0 auto 24px auto",
+        border: "1px solid #BBDEFB",
+        borderRadius: "12px",
       }}
     >
       <h2 style={{ color: "#0D2353" }}>Contador Interactivo</h2>
-
-      {/* Mostrar el valor actual con color dinámico */}
       <p
         style={{
           fontSize: "72px",
@@ -36,22 +33,18 @@ function Contador() {
         {contador}
       </p>
 
-      {/* Botones de control */}
       <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
         <button onClick={decrementar} style={estiloBoton("#B71C1C")}>
           − Restar
         </button>
-
         <button onClick={reiniciar} style={estiloBoton("#455A64")}>
           Reiniciar
         </button>
-
         <button onClick={incrementar} style={estiloBoton("#1B5E20")}>
           + Sumar
         </button>
       </div>
 
-      {/* Mensaje condicional */}
       {contador > 10 && (
         <p style={{ color: "#1565C0", marginTop: "16px" }}>
           ¡Número grande! Mayor a 10.
@@ -66,7 +59,80 @@ function Contador() {
   );
 }
 
-// Función auxiliar para el estilo de los botones
+function ContadorAvanzado() {
+  const [contador, setContador] = useState(0);
+  const [paso, setPaso] = useState(1);
+
+  return (
+    <div
+      style={{
+        textAlign: "center",
+        padding: "24px",
+        fontFamily: "Arial",
+        maxWidth: "360px",
+        margin: "0 auto",
+        border: "1px solid #BBDEFB",
+        borderRadius: "12px",
+      }}
+    >
+      <h2 style={{ color: "#0D2353" }}>Contador con Paso Configurable</h2>
+
+      {/* Selector de paso */}
+      <div style={{ marginBottom: "24px" }}>
+        <label>
+          <strong>Paso: </strong>
+        </label>
+        <input
+          type="number"
+          value={paso}
+          onChange={(e) => setPaso(Number(e.target.value))}
+          min="1"
+          max="100"
+          style={{ width: "60px", padding: "4px", fontSize: "16px" }}
+        />
+      </div>
+
+      <p
+        style={{
+          fontSize: "64px",
+          fontWeight: "bold",
+          color: "#1565C0",
+          margin: "16px 0",
+        }}
+      >
+        {contador}
+      </p>
+
+      <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+        <button
+          onClick={() => setContador((c) => c - paso)}
+          style={estiloBoton("#B71C1C")}
+        >
+          − {paso}
+        </button>
+        <button onClick={() => setContador(0)} style={estiloBoton("#455A64")}>
+          Reiniciar
+        </button>
+        <button
+          onClick={() => setContador((c) => c + paso)}
+          style={estiloBoton("#1B5E20")}
+        >
+          + {paso}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Contador() {
+  return (
+    <div>
+      <ContadorBasico />
+      <ContadorAvanzado />
+    </div>
+  );
+}
+
 function estiloBoton(color) {
   return {
     backgroundColor: color,
