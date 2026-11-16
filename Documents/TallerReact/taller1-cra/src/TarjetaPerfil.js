@@ -1,10 +1,8 @@
-// src/TarjetaPerfil.js
-
 function TarjetaPerfil() {
   return (
     <div
       style={{
-        border: "2px solid #1565C0",
+        border: "2px solid #2E7D32",
         borderRadius: "12px",
         padding: "24px",
         maxWidth: "360px",
@@ -13,25 +11,26 @@ function TarjetaPerfil() {
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
       }}
     >
-      <h2 style={{ color: "#0D2353", marginBottom: "8px" }}>
-        Juan Pérez García
-      </h2>
-      <p style={{ color: "#455A64" }}>
+      <h2 style={{ color: "#1B5E20", marginBottom: "8px" }}>Isabela Largo</h2>
+      <p style={{ color: "#37474F" }}>
         <strong>Programa:</strong> Ingeniería de Sistemas
       </p>
-      <p style={{ color: "#455A64" }}>
-        <strong>Semestre:</strong> 4
+      <p style={{ color: "#37474F" }}>
+        <strong>Semestre:</strong> 5
       </p>
-      <p style={{ color: "#455A64" }}>
+      <p style={{ color: "#37474F" }}>
         <strong>Ciudad:</strong> Pereira, Risaralda
+      </p>
+      <p style={{ color: "#37474F" }}>
+        <strong>Correo electrónico:</strong> isabela-marinl@unilibre.edu.co
       </p>
       <p
         style={{
-          backgroundColor: "#E3F2FD",
+          backgroundColor: "#E8F5E9",
           padding: "8px",
           borderRadius: "6px",
           fontSize: "14px",
-          color: "#1565C0",
+          color: "#2E7D32",
         }}
       >
         Aprendiendo React con la Universidad Libre
